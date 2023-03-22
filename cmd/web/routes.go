@@ -10,6 +10,7 @@ func (app *application) routes() http.Handler {
 	mux := chi.NewRouter()
 
 	mux.Get("/virtual-terminal", app.VeritualTerminal)
+	mux.Post("/payment-succeeded", app.PaymentSucceeded)
 
 	return mux
 }

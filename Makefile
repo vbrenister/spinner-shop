@@ -1,5 +1,3 @@
-STRIPE_SECRET=
-STRIPE_KEY=
 GOSTRIPE_PORT=4000
 API_PORT=4001
 
@@ -35,5 +33,7 @@ stop_api:
 
 stop_app: stop_web stop_api
 
+restart: stop_app app
 
-.PHONY=web api clean build build_api build_web app stop_api stop_web stop_app
+
+.PHONY=web api clean build build_api build_web app stop_api stop_web stop_app restart
