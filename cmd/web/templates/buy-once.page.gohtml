@@ -1,13 +1,13 @@
 {{template "base" .}}
 
 {{define "title"}}
-    Virtual Terminal
+Buy one widget
 {{end}}
 
-
 {{define "content"}}
-<h2 class="mt-3 text-center">Virtual Terminal</h2>
+<h2 class="mt-3 text-center">Buy One Widget</h2>
 <hr>
+<img src="/static/widget.png" alt="widget" class="image-fluid rounded mx-auto d-block" />
 
 <div class="alert alert-danger text-center d-none" id="card-messages"></div>
 <form action="/payment-succeeded" method="post"
@@ -48,8 +48,6 @@
     <input name="payment_amount" id="payment_amount" type="hidden"/>
     <input name="payment_currency" id="payment_currency" type="hidden"/>
 </form>
-
-
 {{end}}
 
 {{define "js"}}

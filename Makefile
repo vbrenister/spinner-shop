@@ -1,3 +1,4 @@
+DSN=postgresql://widgets_store:widgets_store@localhost:5432/widgets_store?sslmode=disable
 GOSTRIPE_PORT=4000
 API_PORT=4001
 
@@ -9,13 +10,13 @@ build_web: clean
 	@go build -o dist/web ./cmd/web
 
 web: build_web
-	@env STRIPE_KEY=${STRIPE_KEY} STRIPE_SECRET=${STRIPE_SECRET} ./dist/web -port=${GOSTRIPE_PORT} &
+	@env STRIPE_KEY=${STRIPE_KEY} STRIPE_SECRET=${STRIPE_SECRET} ./dist/web -port=${GOSTRIPE_PORT} -dsn=${DSN} &
 
 build_api: clean
 	@go build -o dist/api ./cmd/api
 
 api: build_api
-	@env STRIPE_KEY=${STRIPE_KEY} STRIPE_SECRET=${STRIPE_SECRET}  ./dist/api -port=${API_PORT} &
+	@env STRIPE_KEY=${STRIPE_KEY} STRIPE_SECRET=${STRIPE_SECRET}  ./dist/api -port=${API_PORT} -dsn=${DSN} &
 
 build: build_web build_api
 

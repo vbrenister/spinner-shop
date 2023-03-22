@@ -8,6 +8,8 @@ import (
 	"net/http"
 	"os"
 	"time"
+
+	"github.com/vbrenister/spinner-shop/internal/driver"
 )
 
 const (
@@ -16,9 +18,12 @@ const (
 )
 
 type config struct {
-	port   int
-	env    string
-	api    string
+	port int
+	env  string
+	api  string
+	db   struct {
+		dsn string
+	}
 	stripe struct {
 		secret string
 		key    string
@@ -53,6 +58,7 @@ func main() {
 
 	flag.IntVar(&cfg.port, "port", 4000, "Server port to listen on")
 	flag.StringVar(&cfg.env, "env", "dev", "Applicaiton environment {dev|prod}")
+	flag.StringVar(&cfg.db.dsn, "dsn", "postgresql://widgets_store:widgets_store@localhost:5432/widgets_store?sslmode=disable", "Database source")
 	flag.StringVar(&cfg.api, "api", "http://localhost:4001", "Url to API")
 
 	flag.Parse()
@@ -62,6 +68,12 @@ func main() {
 
 	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
 	errorLog := log.New(os.Stdout, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
+
+	conn, err := driver.OpenDB(cfg.db.dsn)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	defer conn.Close()
 
 	tc := make(map[string]*template.Template)
 
@@ -73,7 +85,7 @@ func main() {
 		version:       version,
 	}
 
-	err := app.serve()
+	err = app.serve()
 
 	if err != nil {
 		app.erroLog.Println(err)
